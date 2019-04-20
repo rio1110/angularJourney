@@ -44,8 +44,8 @@ public class User implements UserDetails{
         return this.email;
     }
 
-    public String getAdmin_flag() {
-        return this.admin_flag;
+    public boolean getAdmin_flag() {
+        return (this.admin_flag) == "1" ? true : false;
     }
 
     @Override
