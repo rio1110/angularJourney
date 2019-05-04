@@ -1,9 +1,12 @@
-<div class="container">
-  <div>
-    Email : <input type="text" name="email" [(ngModel)]="email">
-    Password : <input type="password" name="password" [(ngModel)]="password">
-  </div>
-  <button (click)=checkLogin() class="btn btn-success">
-    Login
-  </button>
+<div class="alert alert-danger" [hidden]="!error">
+	There was a problem logging in. Please try again.
 </div>
+<div class="container">
+  <form ((ngSubmit)="login()">
+    <div>
+      Email : <input type="text" name="email" [(ngModel)]="email">
+      Password : <input type="password" name="password" [(ngModel)]="password">
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+  </form>
+  </div>

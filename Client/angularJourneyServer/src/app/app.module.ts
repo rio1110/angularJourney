@@ -10,6 +10,7 @@ import { IndexComponent } from './index/index.component';
 import { LogoutComponent } from './logout/logout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { HttpclientService } from './service/httpclient.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { FooterComponent } from './footer/footer.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [HttpclientService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -7,33 +7,31 @@ import java.util.Base64;
 import javax.servlet.http.HttpServletRequest;
 
 import com.jourey.angularjourney.Entity.User;
+import com.jourey.angularjourney.Service.LoginService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping(path = "user")
-@CrossOrigin(origins = "http://localhost:4200")
+// @CrossOrigin(origins = "http://localhost:4200")
 @Slf4j
 public class UserController {
 
-    @GetMapping
-    public String greeting(@AuthenticationPrincipal(expression = "user") User user, CsrfToken csrfToken) {
-        log.info("token : {}", csrfToken.getToken());
-        log.info("access user : {}", user.toString());
-        return "hello " + user.getUsername();
-    }
-
-    @GetMapping(path = "echo/{message}")
-    public String getEcho(@PathVariable(name = "message") String message) {
-        return message.toUpperCase();
+    @Autowired
+    private LoginService loginService;
+    
+    @GetMapping("/welcome")
+    public String welcome() {
+        log.info("token : {}");
+        // log.info("access user : {}", user.toString());
+        return "hello ";
     }
 }
