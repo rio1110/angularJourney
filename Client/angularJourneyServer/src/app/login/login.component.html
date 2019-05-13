@@ -1,12 +1,32 @@
 <div class="alert alert-danger" [hidden]="!error">
 	There was a problem logging in. Please try again.
 </div>
-<div class="container">
-  <form ((ngSubmit)="login()">
-    <div>
-      Email : <input type="text" name="email" [(ngModel)]="email">
-      Password : <input type="password" name="password" [(ngModel)]="password">
+<form #loginForm="ngForm">
+  <div class="container text-left">
+    <div class="row p-1">
+      <div class="col-2">Email : </div>
+      <div class="col-5">
+        <input id="email" name="email" required [(ngModel)]="login.email" #email="ngModel">
+        <div *ngIf="email.invalid && (email.dirty || email.touched)"
+          class="alert alert-danger">
+          <div *ngIf="email.errors.required">
+              email is required.
+          </div>
+        </div>
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-  </form>
+    <div class="row p-1">
+      <div class="col-2">Password : </div>
+      <div class="col-5">
+        <input id="password" name="password" required [(ngModel)]="login.password" type="password" #password="ngModel">
+        <div *ngIf="password.invalid && (password.dirty || password.touched)"
+          class="alert alert-danger">
+        <div *ngIf="password.errors.required">
+            password is required.
+        </div>
+        </div>          
+      </div>
+    </div>
+    <button (click)="login(email.value, password.value);" [disabled]="loginForm.invalid" class="btn btn-primary">Login</button>
   </div>
+</form>

@@ -1,38 +1,56 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Login } from '../login/login';
+import { Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
 };
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
   authenticated = false;
-  private loginUrl = '/login';
+  private loginUrl = 'http://localhost:8080/login';
 
   constructor(private http: HttpClient) { }
 
-  authenticate(credentials, callback) {
-    const headers = new HttpHeaders(credentials ? {
-      authorization : 'Basic ' + btoa(credentials.username + ':' + credentials.password)
-    } : {});
-
-    this.http.post('/login', {headers: headers}).subscribe(response => {
-      if (response['email']) {
-          this.authenticated = true;
-      } else {
-          this.authenticated = false;
-      }
-      return callback && callback();
-    });
+  /**
+   * post Login
+   * @param login 
+   * @param callback 
+   */
+  authenticate(login: Login): Observable<Login> {
+    const body = new HttpParams()
+    .set('email', login.email)
+    .set('pass', login.password);
+    return this.http.post<any>(
+      this.loginUrl,
+      body.toString(),
+      httpOptions
+      )
+      .pipe(
+      catchError(this.handleError<Login>('authenticate'))
+    );
   }
 
-  // isUserLoggedIn() {
-  //   let user = sessionStorage.getItem('email');
-  //   console.log(!(user === null))
-  //   return !(user === null)
-  // }
+  /**
+   * Handle Http operation that failed.
+   * Let the app continue.
+   * @param operation - name of the operation that failed
+   * @param result - optional value to return as the observable result
+   */
+  private handleError<T> (operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+
+      // TODO: send the error to remote logging infrastructure
+      console.error(error); // log to console instead
+
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
+  }
 
   logOut() {
     sessionStorage.removeItem('email');

@@ -11,6 +11,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { HttpclientService } from './service/httpclient.service';
+import { AuthGuard } from './guard/auth.guard';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { HttpclientService } from './service/httpclient.service';
     HttpClientModule,
     FormsModule
   ],
-  providers: [HttpclientService],
+  providers: [HttpclientService,AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,5 @@
 package com.jourey.angularjourney.Service;
 
-import java.util.Collection;
 
 import com.jourey.angularjourney.Entity.User;
 import com.jourey.angularjourney.Repository.UserRepository;
@@ -20,11 +19,11 @@ public class LoginService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(final String userName) throws UsernameNotFoundException{
-        User user = userRepository.findByEmail(userName);
-
+    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException{
+        User user = userRepository.findByEmail(email);
+        
         if(user == null) {
-            throw new UsernameNotFoundException("Email "+userName+ "not found");
+            throw new UsernameNotFoundException("Email "+email+ "not found");
         }
 
         return user;

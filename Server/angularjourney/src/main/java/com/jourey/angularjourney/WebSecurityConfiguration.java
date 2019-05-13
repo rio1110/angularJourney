@@ -1,5 +1,8 @@
 package com.jourey.angularjourney;
 
+import java.io.Console;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +16,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -26,19 +32,49 @@ public class WebSecurityConfiguration  extends WebSecurityConfigurerAdapter {
   private RestAuthenticationSuccessHandler authenticationSuccessHandler; 
 
   @Bean
-  PasswordEncoder passwordEncoder() {
+  PasswordEncoder getPasswordEncoder() {
      return new BCryptPasswordEncoder();
+    // return new PasswordEncoder() {
+      // @Override
+      // public String encode(CharSequence charSequence) {
+      //     return charSequence.toString();
+      // }
+
+      // @Override
+      // public boolean matches(CharSequence rawPassword, String hashedPassword) {
+      //   BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+      //   String hashedPassword2 = encoder.encode(rawPassword); // hash your rawPassword here
+      //   System.out.println("From Apl: " + hashedPassword2 + "From DB: " + hashedPassword);
+      //   boolean and = hashedPassword2.equals(hashedPassword);
+      //   return hashedPassword2.equals(hashedPassword);
+      // }
+    // };
+  }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+      CorsConfiguration configuration = new CorsConfiguration();
+      configuration.setAllowedOrigins(Arrays.asList("*"));
+      configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+      configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+      configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
+      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+      source.registerCorsConfiguration("/**", configuration);
+      return source;
   }
 
   @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-      auth.eraseCredentials(false)
-              .userDetailsService(userDetailsService)
-              .passwordEncoder(passwordEncoder());
+  public void configure(AuthenticationManagerBuilder auth) throws Exception {
+      auth
+        .userDetailsService(userDetailsService)
+        .passwordEncoder(getPasswordEncoder());
   }
+
   @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+          .cors()
+            .and()
           .authorizeRequests()
             .antMatchers("/resources/", "/webjars/","/assets/")
             .permitAll()
@@ -69,7 +105,7 @@ public class WebSecurityConfiguration  extends WebSecurityConfigurerAdapter {
             .and()
           .exceptionHandling()
             .authenticationEntryPoint(
-              new Http401AuthenticationEntryPoint("Basic realm=\"MyApp\"")
+              new Http401AuthenticationEntryPoint("Basic realm=\"login\"")
             );
     }
 }
