@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Login } from '../login/login';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 const httpOptions = {
@@ -21,18 +21,19 @@ export class AuthenticationService {
    * @param login 
    * @param callback 
    */
-  authenticate(login: Login): Observable<Login> {
+  authenticate(login: Login): Observable<any> {
     const body = new HttpParams()
-    .set('email', login.email)
-    .set('pass', login.password);
+      .set('email', login.email)
+      .set('pass', login.password);
     return this.http.post<any>(
-      this.loginUrl,
-      body.toString(),
-      httpOptions
-      )
+      this.loginUrl, body.toString(), httpOptions)
       .pipe(
-      catchError(this.handleError<Login>('authenticate'))
-    );
+        map(() => {
+          localStorage.setItem('currentUser', JSON.stringify(login));
+          return login;
+        }),
+        catchError((res:HttpErrorResponse)=>throwError(res.status)) 
+      );
   }
 
   /**

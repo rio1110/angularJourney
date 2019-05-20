@@ -12,9 +12,11 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { HttpclientService } from './service/httpclient.service';
 import { AuthGuard } from './guard/auth.guard';
+import { AlertComponent } from './alert/alert.component';
 
 @NgModule({
   declarations: [
+    AlertComponent,
     AppComponent,
     HeaderComponent,
     FooterComponent,

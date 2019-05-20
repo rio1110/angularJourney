@@ -4,6 +4,7 @@ import { AuthenticationService } from '../service/authentication.service';
 import { HttpClient } from '@angular/common/http';
 import { Login } from './login';
 import { first } from 'rxjs/operators';
+import { AlertServiceService } from '../service/alert-service.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,11 @@ import { first } from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private http: HttpClient, private router: Router, private loginservice: AuthenticationService) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private alertService: AlertServiceService,
+    private loginservice: AuthenticationService) {}
 
   email: string = null;
 
@@ -23,6 +28,11 @@ export class LoginComponent implements OnInit {
     this.loginservice.authenticate({email, password} as Login)
       .pipe(first())
       .subscribe(
-        ()=>this.router.navigate(['/index']));
+        (res)=>{this.router.navigate(['/index'])
+        },
+        (error) => {
+          this.alertService.error(error);
+          // this.lo
+    });
   }
 }

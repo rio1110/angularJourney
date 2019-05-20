@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
 
   constructor(private loginService:AuthenticationService, private http: HttpClient, private router: Router) {
-    this.loginService.authenticate(undefined);
+    // this.loginService.authenticate(undefined);
    }
 
   ngOnInit() {
