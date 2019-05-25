@@ -34,21 +34,6 @@ public class WebSecurityConfiguration  extends WebSecurityConfigurerAdapter {
   @Bean
   PasswordEncoder getPasswordEncoder() {
      return new BCryptPasswordEncoder();
-    // return new PasswordEncoder() {
-      // @Override
-      // public String encode(CharSequence charSequence) {
-      //     return charSequence.toString();
-      // }
-
-      // @Override
-      // public boolean matches(CharSequence rawPassword, String hashedPassword) {
-      //   BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-      //   String hashedPassword2 = encoder.encode(rawPassword); // hash your rawPassword here
-      //   System.out.println("From Apl: " + hashedPassword2 + "From DB: " + hashedPassword);
-      //   boolean and = hashedPassword2.equals(hashedPassword);
-      //   return hashedPassword2.equals(hashedPassword);
-      // }
-    // };
   }
 
   @Bean
