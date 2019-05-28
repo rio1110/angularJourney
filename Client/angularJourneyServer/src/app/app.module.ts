@@ -13,6 +13,7 @@ import { FooterComponent } from './footer/footer.component';
 import { HttpclientService } from './service/httpclient.service';
 import { AuthGuard } from './guard/auth.guard';
 import { AlertComponent } from './alert/alert.component';
+import { HouseholdAccountsComponent } from './household-accounts/household-accounts.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AlertComponent } from './alert/alert.component';
     FooterComponent,
     LoginComponent,
     LogoutComponent,
-    IndexComponent
+    IndexComponent,
+    HouseholdAccountsComponent
   ],
   imports: [
     BrowserModule,
